@@ -22,6 +22,7 @@ module.exports = {
       paths: ["src/**/*.js", "src/**/*.scss", "public/index.html"],
       options: {
         ignored: /node_modules/,
+        usePolling: false,
       },
     },
   },
