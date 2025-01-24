@@ -1,17 +1,16 @@
-export class TableView {
-  #parentElement;
-
+import View from "./View";
+class TableView extends View {
   constructor() {
-    this.#parentElement = document.getElementById("table-body");
+    super();
+    this._parentElement = document.getElementById("table-body");
   }
 
   renderTable(users) {
-    this.#parentElement.innerHTML = "";
-
+    this._clear();
     const mappedHtml = users
       .map(
         (user) => `
-        <tr class="px-2">
+        <tr id="current-user" class="px-2">
           <td class="ms-2 text-base roboto-light">
             ${user.fullname}
           </td>
@@ -54,7 +53,7 @@ export class TableView {
                 />
               </svg>
             </button>
-            <button class="btn py-0">
+            <button id="delete-btn" class="btn py-0" data-user-id=${user.id}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -77,6 +76,8 @@ export class TableView {
       )
       .join("");
 
-    this.#parentElement.insertAdjacentHTML("beforeend", mappedHtml);
+    this._parentElement.insertAdjacentHTML("beforeend", mappedHtml);
   }
 }
+
+export const tableView = new TableView();

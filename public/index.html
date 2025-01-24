@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CRUD Project</title>
+    <title>CRUD DEMO</title>
   </head>
   <body class="bg-body">
     <div class="container-xxl shadow-sm rounded p-5">
@@ -14,12 +14,20 @@
               <h3 class="roboto-medium fs-2 mb-0">CRUD Table</h3>
             </a>
             <form class="d-flex w-50">
-              <input
-                type="search"
-                class="form-control me-2"
-                placeholder="Search"
-                aria-label="Search"
-              />
+              <div class="d-flex align-center w-75">
+                <input
+                  id="search"
+                  type="search"
+                  class="form-control me-2"
+                  placeholder="Search"
+                  aria-label="Search"
+                />
+                <span
+                  id="search-cancel"
+                  class="fs-4 fw-normal text-secondary search-cancel"
+                  >&times;</span
+                >
+              </div>
               <button class="btn btn-primary text-white" type="submit">
                 Search
               </button>
@@ -29,6 +37,7 @@
               class="btn btn-success"
               data-bs-toggle="modal"
               data-bs-target="#custom-modal"
+              id="add-btn"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -47,7 +56,7 @@
           </div>
         </nav>
       </header>
-      <table class="table shadow-sm">
+      <table class="table shadow-sm" id="table">
         <thead class="bg-gray">
           <tr class="px-2">
             <th scope="col" class="text-secondary roboto-medium">Name</th>
@@ -192,6 +201,38 @@
           </tr> -->
         </tbody>
       </table>
+      <div class="d-flex align-center justify-content-between" id="pagination">
+        <!-- <div id="pagination-showing">
+          <p class="fs-6 fw-lighter">
+            Showing <span class="fw-bolder"> 1 to 8 of 40 </span> entries
+          </p>
+        </div>
+        <div id="pagination-amount">
+          <ul class="pagination pagination-sm">
+            <li class="page-item">
+              <a class="page-link" href="#">&lt;</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">1</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">2</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">3</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">4</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">5</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">&gt;</a>
+            </li>
+          </ul>
+        </div> -->
+      </div>
     </div>
 
     <!-- Modal -->
@@ -217,8 +258,8 @@
               aria-label="Close"
             ></button>
           </div>
-          <form id="form-data">
-            <div class="modal-body">
+          <form id="form-create">
+            <!-- <div class="modal-body">
               <div class="mb-3">
                 <label for="fullname" class="form-label">User Name</label>
                 <input
@@ -266,10 +307,14 @@
               >
                 Cancel
               </button>
-              <button type="submit" class="btn btn-success text-white">
+              <button
+                id="submit"
+                type="submit"
+                class="btn btn-success text-white"
+              >
                 Submit
               </button>
-            </div>
+            </div> -->
           </form>
         </div>
       </div>

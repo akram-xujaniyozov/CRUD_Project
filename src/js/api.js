@@ -5,7 +5,7 @@ export default function api() {
   try {
     return axios.create({
       baseURL: API_URL,
-      timeout: 3000,
+      timeout: 4000,
       headers: {
         "Content-Type": "application/json",
       },

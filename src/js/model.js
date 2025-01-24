@@ -5,13 +5,22 @@ export const usersData = {
   users: [],
 };
 
-export const getAllUsers = async () => {
-  const { data } = await AJAX_CALL().get("/users");
-  // usersData.meta = data[0].meta;
-  // usersData.users = data[0].users;
-  usersData.users = data;
+export const getAllUsers = async (query) => {
+  const { data } = await AJAX_CALL().get("", { params: query });
+  if (!data) return;
+  if (data.meta && data.items) {
+    usersData.users = data.items;
+    usersData.meta = data.meta;
+  } else {
+    usersData.users = data;
+    usersData.meta = {};
+  }
 };
 
 export const createUser = async (user) => {
-  return await AJAX_CALL().post("/users", user);
+  return await AJAX_CALL().post("", user);
+};
+
+export const deleteUser = async (id) => {
+  return await AJAX_CALL().delete(`/${id}`);
 };

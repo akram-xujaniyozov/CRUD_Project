@@ -1,42 +1,67 @@
-import "../sass/styles.scss";
 import * as bootstrap from "bootstrap";
-import { getAllUsers, createUser, usersData } from "./model";
-import { TableView } from "./view/";
+import "../sass/styles.scss";
+import { getAllUsers, createUser, deleteUser, usersData } from "./model";
+import {
+  tableView,
+  addFormView,
+  searchFormView,
+  actionsView,
+  paginationView,
+} from "./view";
 
-// Getting all forms
-const forms = document.forms;
+const paginationQuries = (number = 1) => {
+  return { page: number, limit: 8 };
+};
 
 // Loading users
-async function controllerLoadUsers() {
-  await getAllUsers();
-  const tableView = new TableView();
+async function controllerLoadUsers(query) {
+  tableView.renderSpinner();
+  await getAllUsers(query);
   tableView.renderTable(usersData.users);
+  paginationView.renderPagination(usersData.meta);
 }
 
-controllerLoadUsers();
+// Searching Users
+function controllerSearchUser(value) {
+  controllerLoadUsers({ fullname: value });
+}
 
-// get form element to send data
-const sendForm = forms[1];
-sendForm.addEventListener("submit", async function (event) {
-  event.preventDefault();
+// Cancel search user
+function controllerCancelSearchUser() {
+  controllerLoadUsers(paginationQuries());
+}
 
-  const date = new Date(sendForm.date.value);
-  const formattedDate = Intl.DateTimeFormat("en-GB", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  }).format(date);
-
-  const formData = new FormData();
-  formData.append("fullname", sendForm.fullname.value);
-  formData.append("date", formattedDate);
-  formData.append("status", sendForm.status.value);
-  formData.append("phone", sendForm.phone.value);
-  formData.append("mail", sendForm.mail.value);
-  formData.append("address", sendForm.address.value);
-
-  const response = await createUser(formData);
+// Creating user
+async function controllerCreateUser(newUser) {
+  const response = await createUser(newUser);
   if (response.status === 201) {
-    controllerLoadUsers();
+    controllerLoadUsers(paginationQuries());
   }
-});
+}
+
+// Deleting user by id
+async function controllerDeleteUser(id) {
+  const response = await deleteUser(id);
+  if (response.status === 200) {
+    controllerLoadUsers(paginationQuries());
+  }
+}
+
+function controllerCurrentPagination(number) {
+  if (!isNaN(number)) controllerLoadUsers(paginationQuries(number));
+}
+
+// Initial function
+const INIT = function () {
+  controllerLoadUsers(paginationQuries());
+  actionsView.deleteUser(controllerDeleteUser);
+  actionsView.addUser(addFormView.renderFormElements);
+  addFormView.createUserHandler(controllerCreateUser);
+  searchFormView.searchUserHandler(controllerSearchUser);
+  searchFormView.cancelSearchUserHandler(controllerCancelSearchUser);
+  paginationView.getCurrentPagination(controllerCurrentPagination);
+  paginationView.nextPagination(controllerCurrentPagination);
+  paginationView.prevPagination(controllerCurrentPagination);
+};
+
+INIT();
