@@ -1,16 +1,28 @@
 import axios from "axios";
-import { API_URL } from "./config";
+import { API_URL } from "./utils/config";
 
-export default function api() {
-  try {
-    return axios.create({
-      baseURL: API_URL,
-      timeout: 4000,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-  } catch (error) {
-    throw new Error(error.message);
+export const API = axios.create({
+  baseURL: API_URL,
+});
+
+API.interceptors.request.use(
+  function (config) {
+    config.timeout = 3000;
+    config.headers["Content-Type"] = "application/json";
+    return config;
+  },
+  function (error) {
+    return Promise.reject(error);
   }
-}
+);
+
+API.interceptors.response.use(
+  function (response) {
+    return response;
+  },
+  function (error) {
+    if (error.response.status === 400) {
+      window.alert("Something went wrong!!!");
+    }
+  }
+);

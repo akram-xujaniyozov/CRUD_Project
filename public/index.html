@@ -17,7 +17,7 @@
               <div class="d-flex align-center w-75">
                 <input
                   id="search"
-                  type="search"
+                  type="text"
                   class="form-control me-2"
                   placeholder="Search"
                   aria-label="Search"
@@ -33,11 +33,11 @@
               </button>
             </form>
             <button
+              id="add-btn"
               type="button"
               class="btn btn-success"
               data-bs-toggle="modal"
               data-bs-target="#custom-modal"
-              id="add-btn"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -246,7 +246,7 @@
       aria-hidden="true"
     >
       <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content" style="height: 684px">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="custom-modal-label">
               Modal title
@@ -316,6 +316,7 @@
               </button>
             </div> -->
           </form>
+          <form id="form-edit"></form>
         </div>
       </div>
     </div>

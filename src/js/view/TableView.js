@@ -39,7 +39,13 @@ class TableView extends View {
            ${user.address}
           </td>
           <td>
-            <button class="btn py-0">
+            <button 
+              id="edit-btn" 
+              class="btn py-0" 
+              data-bs-toggle="modal"
+              data-bs-target="#custom-modal"
+              data-user-id=${user.id}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="18"

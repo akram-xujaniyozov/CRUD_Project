@@ -1,17 +1,27 @@
 import * as bootstrap from "bootstrap";
 import "../sass/styles.scss";
-import { getAllUsers, createUser, deleteUser, usersData } from "./model";
+import {
+  getAllUsers,
+  getUser,
+  createUser,
+  editUser,
+  deleteUser,
+  usersData,
+} from "./model";
 import {
   tableView,
   addFormView,
   searchFormView,
   actionsView,
   paginationView,
+  editFormView,
 } from "./view";
-
-const paginationQuries = (number = 1) => {
-  return { page: number, limit: 8 };
-};
+import { paginationQuries } from "./utils/helpers";
+import {
+  setPaginationStorage,
+  getPaginationStorage,
+  clearPaginationStorage,
+} from "./utils/dataStorage";
 
 // Loading users
 async function controllerLoadUsers(query) {
@@ -21,6 +31,10 @@ async function controllerLoadUsers(query) {
   paginationView.renderPagination(usersData.meta);
 }
 
+async function controllerLoadOneUser(id) {
+  return await getUser(id);
+}
+
 // Searching Users
 function controllerSearchUser(value) {
   controllerLoadUsers({ fullname: value });
@@ -28,14 +42,22 @@ function controllerSearchUser(value) {
 
 // Cancel search user
 function controllerCancelSearchUser() {
-  controllerLoadUsers(paginationQuries());
+  controllerLoadUsers(paginationQuries(getPaginationStorage()));
 }
 
 // Creating user
 async function controllerCreateUser(newUser) {
   const response = await createUser(newUser);
   if (response.status === 201) {
-    controllerLoadUsers(paginationQuries());
+    controllerLoadUsers(paginationQuries(getPaginationStorage()));
+  }
+}
+
+// Editing user
+async function controllerEditUser(user, id) {
+  const response = await editUser(user, id);
+  if (response.status === 200) {
+    controllerLoadUsers(paginationQuries(getPaginationStorage()));
   }
 }
 
@@ -43,25 +65,30 @@ async function controllerCreateUser(newUser) {
 async function controllerDeleteUser(id) {
   const response = await deleteUser(id);
   if (response.status === 200) {
-    controllerLoadUsers(paginationQuries());
+    controllerLoadUsers(paginationQuries(getPaginationStorage()));
   }
 }
 
 function controllerCurrentPagination(number) {
-  if (!isNaN(number)) controllerLoadUsers(paginationQuries(number));
+  if (!isNaN(number)) {
+    setPaginationStorage(number);
+    controllerLoadUsers(paginationQuries(number));
+  }
 }
 
 // Initial function
 const INIT = function () {
-  controllerLoadUsers(paginationQuries());
-  actionsView.deleteUser(controllerDeleteUser);
-  actionsView.addUser(addFormView.renderFormElements);
+  controllerLoadUsers(paginationQuries(getPaginationStorage()));
+  actionsView.addUserHandler();
+  actionsView.updateUserHanler(controllerLoadOneUser);
+  actionsView.deleteUserHandler(controllerDeleteUser);
   addFormView.createUserHandler(controllerCreateUser);
+  editFormView.editUserHandler(controllerEditUser);
   searchFormView.searchUserHandler(controllerSearchUser);
   searchFormView.cancelSearchUserHandler(controllerCancelSearchUser);
-  paginationView.getCurrentPagination(controllerCurrentPagination);
-  paginationView.nextPagination(controllerCurrentPagination);
-  paginationView.prevPagination(controllerCurrentPagination);
+  paginationView.findCurrentPaginationHandler(controllerCurrentPagination);
+  paginationView.nextPaginationHandler(controllerCurrentPagination);
+  paginationView.prevPaginationHandler(controllerCurrentPagination);
 };
 
 INIT();

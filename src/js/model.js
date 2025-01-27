@@ -1,12 +1,13 @@
-import AJAX_CALL from "./api";
+import { API } from "./api";
 
-export const usersData = {
+const usersData = {
   meta: {},
   users: [],
 };
 
-export const getAllUsers = async (query) => {
-  const { data } = await AJAX_CALL().get("", { params: query });
+// Get All users
+const getAllUsers = async (query) => {
+  const { data } = await API.get("", { params: query });
   if (!data) return;
   if (data.meta && data.items) {
     usersData.users = data.items;
@@ -17,10 +18,25 @@ export const getAllUsers = async (query) => {
   }
 };
 
-export const createUser = async (user) => {
-  return await AJAX_CALL().post("", user);
+// Get one user
+const getUser = async (id) => {
+  const { data } = await API.get(`/${id}`);
+  return data;
 };
 
-export const deleteUser = async (id) => {
-  return await AJAX_CALL().delete(`/${id}`);
+// Create new user
+const createUser = async (user) => {
+  return await API.post("", user);
 };
+
+// Edit user
+const editUser = async (user, id) => {
+  return await API.patch(`/${id}`, user);
+};
+
+// Delete user
+const deleteUser = async (id) => {
+  return await API.delete(`/${id}`);
+};
+
+export { getAllUsers, getUser, createUser, editUser, deleteUser, usersData };

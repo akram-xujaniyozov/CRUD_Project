@@ -6,7 +6,7 @@ class PaginationView extends View {
     this._parentElement = document.getElementById("pagination");
   }
 
-  prevPagination(handler) {
+  prevPaginationHandler(handler) {
     this._parentElement.addEventListener("click", function (event) {
       const backPagination = event.target.closest("#pagination-back");
       if (!backPagination) return;
@@ -15,7 +15,7 @@ class PaginationView extends View {
     });
   }
 
-  nextPagination(handler) {
+  nextPaginationHandler(handler) {
     this._parentElement.addEventListener("click", function (event) {
       const nextPagination = event.target.closest("#pagination-go");
       if (!nextPagination) return;
@@ -24,7 +24,7 @@ class PaginationView extends View {
     });
   }
 
-  getCurrentPagination(handler) {
+  findCurrentPaginationHandler(handler) {
     this._parentElement.addEventListener("click", function (event) {
       const paginationNumber = event.target.closest(".page-link");
       if (!paginationNumber) return;
@@ -36,11 +36,16 @@ class PaginationView extends View {
     if (Object.keys(meta).length >= 1) {
       this._clear();
 
+      // destruction of meta object
       const { total_items, per_page, current_page, total_pages } = meta;
+
+      // find last user and first user
       const maxUsersAmount = current_page * per_page;
       const lastUserPerPage =
         maxUsersAmount < total_items ? maxUsersAmount : total_items;
       const firstUserPerPage = maxUsersAmount - per_page + 1;
+
+      // find pagination length
       const pageNumbers = [];
       for (let i = 1; i <= total_pages; i++) {
         pageNumbers.push(i);
@@ -66,23 +71,29 @@ class PaginationView extends View {
         </p>
       </div>
       <div id="pagination-amount">
+        ${
+          total_items > 8
+            ? `
         <ul class="pagination pagination-sm">
-          <li class="page-item">
-            <button  id="pagination-back" class="page-link text-secondary ${
-              current_page === 1 ? "text-secondary" : "text-black"
-            }" data-page=${current_page} ${
-        current_page === 1 ? "disabled" : ""
-      }>&lt;</button>
-          </li>
-          ${paginationItem}
-          <li class="page-item">
-            <button id="pagination-go" class="page-link ${
-              current_page === total_pages ? "text-secondary" : "text-black"
-            }" data-page=${current_page} ${
-        current_page === total_pages ? "disabled" : ""
-      }>&gt;</button>
-          </li>
-        </ul>
+        <li class="page-item">
+          <button  id="pagination-back" class="page-link text-secondary ${
+            current_page === 1 ? "text-secondary" : "text-black"
+          }" data-page=${current_page} ${
+                current_page === 1 ? "disabled" : ""
+              }>&lt;</button>
+        </li>
+        ${paginationItem}
+        <li class="page-item">
+          <button id="pagination-go" class="page-link ${
+            current_page === total_pages ? "text-secondary" : "text-black"
+          }" data-page=${current_page} ${
+                current_page === total_pages ? "disabled" : ""
+              }>&gt;</button>
+        </li>
+      </ul>
+        `
+            : ``
+        }      
       </div>
     `;
       this._parentElement.insertAdjacentHTML("beforeend", paginationHtml);

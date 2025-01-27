@@ -1,30 +1,52 @@
-class ActionsView {
+import FormView from "./FormView";
+class ActionsView extends FormView {
   #tableBody;
   #addBtn;
-  #editBtn;
   #modalCreateForm;
+  #modalEditForm;
   constructor() {
+    super();
     this.#tableBody = document.querySelector("#table-body");
     this.#addBtn = document.querySelector("#add-btn");
     this.#modalCreateForm = document.querySelector("#form-create");
+    this.#modalEditForm = document.querySelector("#form-edit");
   }
 
-  addUser(handler) {
-    const formModalEl = this.#modalCreateForm;
+  addUserHandler() {
+    const formCreateModal = this.#modalCreateForm;
+    const formUpdateModal = this.#modalEditForm;
+    const htmlFormElements = this._renderFormElements;
+    const clear = this._clearFormElements;
     this.#addBtn.addEventListener("click", function () {
-      formModalEl.innerHTML = "";
-      const htmlFormElements = handler();
-      formModalEl.insertAdjacentHTML("beforeend", htmlFormElements);
+      clear(formCreateModal, formUpdateModal);
+      formCreateModal.insertAdjacentHTML("beforeend", htmlFormElements());
     });
   }
 
-  editUser() {}
+  updateUserHanler(handler) {
+    const formUpdateModal = this.#modalEditForm;
+    const formCreateModal = this.#modalCreateForm;
+    const htmlFormElements = this._renderFormElements;
+    const clear = this._clearFormElements;
+    this.#tableBody.addEventListener("click", async function (event) {
+      const updateBtn = event.target.closest("#edit-btn");
+      if (!updateBtn) return;
+      const userId = updateBtn.dataset.userId;
+      const response = await handler(userId);
+      if (response) {
+        clear(formCreateModal, formUpdateModal);
+        formUpdateModal.insertAdjacentHTML(
+          "beforeend",
+          htmlFormElements(response)
+        );
+      }
+    });
+  }
 
-  deleteUser(handler) {
+  deleteUserHandler(handler) {
     this.#tableBody.addEventListener("click", function (event) {
       const deleteBtn = event.target.closest("#delete-btn");
       if (!deleteBtn) return;
-
       if (
         window.confirm(`Haqiqatdan foydalanuvchini o'chirishdan xohlaysizmi!`)
       ) {
