@@ -7,7 +7,8 @@
     "dev": "webpack --mode development",
     "build": "webpack --mode production",
     "start": "webpack-dev-server --mode development",
-    "server": "npx json-server data/db.json --watch"
+    "server": "npx json-server data/db.json --watch",
+    "netlify": "webpack --mode production netlify link netlify deploy --prod netlify open"
   },
   "repository": {
     "type": "git",
