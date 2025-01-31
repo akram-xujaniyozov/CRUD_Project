@@ -3,7 +3,7 @@
   publish = "dist"
 
 [dev]
-  command = "yarn start"
+  command = "npm run start"
   targetPort = 4000
   port = 8000
   publish = "dist"
