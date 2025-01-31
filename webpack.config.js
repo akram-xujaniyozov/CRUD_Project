@@ -8,6 +8,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "dist"), // output directory
     filename: "js/bundle.js", // output file
+    clean: true,
   },
   devtool: "source-map",
   devServer: {
