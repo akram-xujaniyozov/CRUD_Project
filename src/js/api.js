@@ -21,8 +21,14 @@ API.interceptors.response.use(
     return response;
   },
   function (error) {
-    if (error.response.status === 400) {
-      window.alert("Something went wrong!!!");
+    if (error.response) {
+      const status = error.response.status;
+      if (status === 403 || status === 404) {
+        window.alert("Something went wrong!!!");
+      } else if (status === 500) {
+        window.alert("Internal server error!!!");
+      }
     }
+    return Promise.reject(error);
   }
 );

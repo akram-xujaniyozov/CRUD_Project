@@ -12,7 +12,6 @@ export class AddFormView extends FormView {
     const clearInputs = this._clearInputs;
     this.#createForm.addEventListener("submit", function (event) {
       event.preventDefault();
-
       const formData = getFormDatas(this);
       handler(formData);
       clearInputs(this);

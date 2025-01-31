@@ -15,6 +15,7 @@ import {
   actionsView,
   paginationView,
   editFormView,
+  toastView,
 } from "./view";
 import { paginationQuries } from "./utils/helpers";
 import {
@@ -42,31 +43,25 @@ function controllerSearchUser(value) {
 
 // Cancel search user
 function controllerCancelSearchUser() {
-  controllerLoadUsers(paginationQuries(getPaginationStorage()));
+  controllerLoadUsers(paginationQuries());
 }
 
 // Creating user
 async function controllerCreateUser(newUser) {
-  const response = await createUser(newUser);
-  if (response.status === 201) {
-    controllerLoadUsers(paginationQuries(getPaginationStorage()));
-  }
+  await createUser(newUser);
+  await controllerLoadUsers(paginationQuries());
 }
 
 // Editing user
 async function controllerEditUser(user, id) {
-  const response = await editUser(user, id);
-  if (response.status === 200) {
-    controllerLoadUsers(paginationQuries(getPaginationStorage()));
-  }
+  await editUser(user, id);
+  await controllerLoadUsers(paginationQuries());
 }
 
 // Deleting user by id
 async function controllerDeleteUser(id) {
-  const response = await deleteUser(id);
-  if (response.status === 200) {
-    controllerLoadUsers(paginationQuries(getPaginationStorage()));
-  }
+  await deleteUser(id);
+  await controllerLoadUsers(paginationQuries());
 }
 
 function controllerCurrentPagination(number) {
@@ -78,7 +73,7 @@ function controllerCurrentPagination(number) {
 
 // Initial function
 const INIT = function () {
-  controllerLoadUsers(paginationQuries(getPaginationStorage()));
+  controllerLoadUsers(paginationQuries());
   actionsView.addUserHandler();
   actionsView.updateUserHanler(controllerLoadOneUser);
   actionsView.deleteUserHandler(controllerDeleteUser);

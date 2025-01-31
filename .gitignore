@@ -1,6 +1,5 @@
 # ignored files
 node_modules
-dist
 coverage
 .env
 yarn-error.log

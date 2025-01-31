@@ -4,3 +4,4 @@ export * from "./SearchFormView";
 export * from "./TableView";
 export * from "./PaginationView";
 export * from "./ActionsView";
+export * from "./ToastView";
