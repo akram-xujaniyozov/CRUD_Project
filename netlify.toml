@@ -1,9 +1,11 @@
 [build]
-  command = "npm run netlify"
+  command = "npm run build"
   publish = "dist"
 
-[dev]
-  command = "npm run start"
-  targetPort = 4000
-  port = 8000
-  publish = "dist"
+[build.environment]
+  NODE_VERSION = "18"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
